@@ -1,0 +1,6 @@
+@RestWithAspNet5UdemayErudio_HostAddress = http://localhost:5156
+
+GET {{RestWithAspNet5UdemayErudio_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
