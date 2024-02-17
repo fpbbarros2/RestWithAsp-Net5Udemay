@@ -1,58 +1,101 @@
-﻿using RestWithAspNet5UdemayErudio.Models;
+﻿using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using RestWithAspNet5UdemayErudio.Models;
+using RestWithAspNet5UdemayErudio.Models.Context;
+using System;
 
 namespace RestWithAspNet5UdemayErudio.Services.Implementation
 {
     public class PersonServiceImplementation : IPersonServices
     {
+
+
+
         private volatile int count;
+        private MySqlContext _mySqlContext;
+
+        public PersonServiceImplementation(MySqlContext mySqlContext)
+        {
+            _mySqlContext = mySqlContext;
+        }
+
         public Person Create(Person person)
         {
+
+            try
+            {
+                _mySqlContext.people.Add(person);
+                _mySqlContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
             return person;
         }
 
         public void Delete(long id)
         {
-            //
+            var result = _mySqlContext.people.FirstOrDefault(e => e.Id.Equals(id));
+
+            if (result != null)
+            {
+
+                try
+                {
+                    _mySqlContext.people.Remove(result);
+                    _mySqlContext.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
+            }
+
+
+
+
         }
 
         public List<Person> FindAll()
         {
-            List<Person> people = new List<Person>();
-
-            for (int i = 0; i < 8; i++)
-            {
-                Person person = MockPerson(i); 
-
-
-                people.Add(person);
-            }
-
-            return people;
+            return _mySqlContext.people.ToList();
         }
 
         public Person FindByID(long id)
         {
-            return new Person
-            { Id = IncrementAndGet(), FirstName = "Fábio", Address = "Amargosa", Gender = "Male", lastName = "Barros" };
+            return _mySqlContext.people.SingleOrDefault(e => e.Id.Equals(id)) ?? null;
+
         }
 
         public Person Update(Person person)
         {
+            if (!Exists(person.Id))
+                return new Person();
 
+            var result = _mySqlContext.people.FirstOrDefault(e => e.Id.Equals(person.Id));
 
+            if (result != null)
+            {
+
+                try
+                {
+                    _mySqlContext.people.Entry(result).CurrentValues.SetValues(person);
+                    _mySqlContext.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
+            }
             return person;
         }
 
-        private Person MockPerson(int i)
+        private bool Exists(long id)
         {
-            return new Person
-            { Id = IncrementAndGet(), FirstName = "Person FirstName "  + i,  Address = "Person Address " + i, Gender = "Person Gender " + i, lastName = "Person lastName " + i };
-        }
-
-        private long IncrementAndGet()
-        {
-             
-            return Interlocked.Increment(ref count);
+            return _mySqlContext.people.Any(e => e.Id.Equals(id));
         }
     }
 }
