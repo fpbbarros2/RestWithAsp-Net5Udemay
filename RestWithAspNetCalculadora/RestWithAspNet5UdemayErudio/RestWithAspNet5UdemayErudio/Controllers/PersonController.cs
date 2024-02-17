@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using RestWithAspNet5UdemayErudio.Models;
 using RestWithAspNet5UdemayErudio.Services;
@@ -5,7 +6,8 @@ using RestWithAspNet5UdemayErudio.Services;
 namespace RestWithAspNet5UdemayErudio.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1")]
+    [Route("api/[controller]/v{version:apiVersion}")]
     public class PersonController : ControllerBase
     {
 
