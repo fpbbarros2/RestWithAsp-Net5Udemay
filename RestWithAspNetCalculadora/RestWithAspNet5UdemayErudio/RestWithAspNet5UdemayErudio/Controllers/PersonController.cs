@@ -1,71 +1,78 @@
 using Microsoft.AspNetCore.Mvc;
+using RestWithAspNet5UdemayErudio.Models;
+using RestWithAspNet5UdemayErudio.Services;
 
 namespace RestWithAspNet5UdemayErudio.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PersonController : ControllerBase
     {
-      
+
 
         private readonly ILogger<PersonController> _logger;
+        private IPersonServices _personServices;
 
-        public PersonController(ILogger<PersonController> logger)
+        public PersonController(ILogger<PersonController> logger, IPersonServices personServices)
         {
             _logger = logger;
+            _personServices = personServices;
         }
 
-        [HttpGet("sum/{firstNumber}/{secondNumber}")]
-        public IActionResult Sum(string firstNumber, string secondNumber)
+        [HttpGet]
+        public IActionResult Get()
         {
 
-            if (IsNumeric(firstNumber) && IsNumeric(secondNumber))
+            return Ok(_personServices.FindAll());
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(long id)
+        {
+            var person = _personServices.FindByID(id);
+            if (person == null)
             {
-                var sum = ConvertToDecimal(firstNumber) + ConvertToDecimal(secondNumber);
-
-                return Ok(sum.ToString());
-
-
+                return NotFound();
             }
-            return BadRequest("Invalid Input");
+            return Ok(person);
         }
 
-        
 
-        private decimal ConvertToDecimal(string strNumber)
+        [HttpPost]
+        public IActionResult Post([FromBody] Person person)
         {
 
-            decimal decimalValue;
+            if (person == null)
+                return BadRequest();
 
-            if (decimal.TryParse(strNumber, out decimalValue))
-            {
-                return decimalValue;
-            }
 
-            return 0;
+            return Ok(_personServices.Create(person));
         }
 
-        private double ConvertToDouble(string strNumber)
+        [HttpPut]
+        public IActionResult Put([FromBody] Person person)
         {
 
-            double doubleValue;
+            if (person == null)
+                return BadRequest();
 
-            if (double.TryParse(strNumber, out doubleValue))
-            {
-                return doubleValue;
-            }
 
-            return 0;
+            return Ok(_personServices.Update(person));
         }
 
-        private bool IsNumeric(string strNumber)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id)
         {
-            double number;
+            var person = _personServices.FindByID(id);
+            if (person == null)
+                return NotFound();
 
-            bool isNumber = Double.TryParse(strNumber, System.Globalization.NumberStyles.Any, 
-                System.Globalization.NumberFormatInfo.InvariantInfo, out number);
+            _personServices.Delete(id);
 
-            return isNumber;
+            return NoContent();
         }
+
+
+
     }
 }
