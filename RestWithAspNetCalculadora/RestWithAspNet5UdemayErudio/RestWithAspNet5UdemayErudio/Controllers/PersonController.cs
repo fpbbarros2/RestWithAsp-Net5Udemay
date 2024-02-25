@@ -1,7 +1,7 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using RestWithAspNet5UdemayErudio.Models;
-using RestWithAspNet5UdemayErudio.Services;
+using RestWithAspNet5UdemayErudio.Bussines;
 
 namespace RestWithAspNet5UdemayErudio.Controllers
 {
@@ -13,25 +13,25 @@ namespace RestWithAspNet5UdemayErudio.Controllers
 
 
         private readonly ILogger<PersonController> _logger;
-        private IPersonServices _personServices;
+        private IPersonBussines _personBussines;
 
-        public PersonController(ILogger<PersonController> logger, IPersonServices personServices)
+        public PersonController(ILogger<PersonController> logger, IPersonBussines personBussines)
         {
             _logger = logger;
-            _personServices = personServices;
+            _personBussines = personBussines;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
 
-            return Ok(_personServices.FindAll());
+            return Ok(_personBussines.FindAll());
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(long id)
         {
-            var person = _personServices.FindByID(id);
+            var person = _personBussines.FindByID(id);
             if (person == null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace RestWithAspNet5UdemayErudio.Controllers
                 return BadRequest();
 
 
-            return Ok(_personServices.Create(person));
+            return Ok(_personBussines.Create(person));
         }
 
         [HttpPut]
@@ -59,17 +59,17 @@ namespace RestWithAspNet5UdemayErudio.Controllers
                 return BadRequest();
 
 
-            return Ok(_personServices.Update(person));
+            return Ok(_personBussines.Update(person));
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
-            var person = _personServices.FindByID(id);
+            var person = _personBussines.FindByID(id);
             if (person == null)
                 return NotFound();
 
-            _personServices.Delete(id);
+            _personBussines.Delete(id);
 
             return NoContent();
         }

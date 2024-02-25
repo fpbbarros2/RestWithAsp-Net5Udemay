@@ -3,27 +3,24 @@ using RestWithAspNet5UdemayErudio.Models;
 using RestWithAspNet5UdemayErudio.Models.Context;
 using System;
 
-namespace RestWithAspNet5UdemayErudio.Services.Implementation
+namespace RestWithAspNet5UdemayErudio.Repository.Implementation
 {
-    public class PersonServiceImplementation : IPersonServices
+    public class BookRepositoryImplementation : IBookRepository
     {
 
-
-
-        private volatile int count;
         private MySqlContext _mySqlContext;
 
-        public PersonServiceImplementation(MySqlContext mySqlContext)
+        public BookRepositoryImplementation(MySqlContext mySqlContext)
         {
             _mySqlContext = mySqlContext;
         }
 
-        public Person Create(Person person)
+        public Book Create(Book book)
         {
 
             try
             {
-                _mySqlContext.people.Add(person);
+                _mySqlContext.books.Add(book);
                 _mySqlContext.SaveChanges();
             }
             catch (Exception ex)
@@ -31,19 +28,19 @@ namespace RestWithAspNet5UdemayErudio.Services.Implementation
 
                 throw ex;
             }
-            return person;
+            return book;
         }
 
         public void Delete(long id)
         {
-            var result = _mySqlContext.people.FirstOrDefault(e => e.Id.Equals(id));
+            var result = _mySqlContext.books.FirstOrDefault(e => e.Id.Equals(id));
 
             if (result != null)
             {
 
                 try
                 {
-                    _mySqlContext.people.Remove(result);
+                    _mySqlContext.books.Remove(result);
                     _mySqlContext.SaveChanges();
                 }
                 catch (Exception ex)
@@ -58,30 +55,31 @@ namespace RestWithAspNet5UdemayErudio.Services.Implementation
 
         }
 
-        public List<Person> FindAll()
+        public List<Book> FindAll()
         {
-            return _mySqlContext.people.ToList();
+            return _mySqlContext.books.ToList();
         }
 
-        public Person FindByID(long id)
+        public Book FindByID(long id)
         {
-            return _mySqlContext.people.SingleOrDefault(e => e.Id.Equals(id)) ?? null;
+
+            return _mySqlContext.books.SingleOrDefault(e => e.Id.Equals(id));
 
         }
 
-        public Person Update(Person person)
+        public Book Update(Book book)
         {
-            if (!Exists(person.Id))
-                return new Person();
+            if (!Exists(book.Id))
+                return null;
 
-            var result = _mySqlContext.people.FirstOrDefault(e => e.Id.Equals(person.Id));
+            var result = _mySqlContext.books.FirstOrDefault(e => e.Id.Equals(book.Id));
 
             if (result != null)
             {
 
                 try
                 {
-                    _mySqlContext.people.Entry(result).CurrentValues.SetValues(person);
+                    _mySqlContext.books.Entry(result).CurrentValues.SetValues(book);
                     _mySqlContext.SaveChanges();
                 }
                 catch (Exception ex)
@@ -90,12 +88,12 @@ namespace RestWithAspNet5UdemayErudio.Services.Implementation
                     throw ex;
                 }
             }
-            return person;
+            return book;
         }
 
-        private bool Exists(long id)
+        public bool Exists(long id)
         {
-            return _mySqlContext.people.Any(e => e.Id.Equals(id));
+            return _mySqlContext.books.Any(e => e.Id.Equals(id));
         }
     }
 }
