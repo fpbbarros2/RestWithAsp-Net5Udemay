@@ -12,7 +12,7 @@ namespace RestWithAspNet5UdemayErudio.Models
         public string FirstName { get; set; }
 
         [Column("last_name")]
-        public string lastName { get; set; }
+        public string LastName { get; set; }
 
         [Column("address")]
         public string Address { get; set; }
