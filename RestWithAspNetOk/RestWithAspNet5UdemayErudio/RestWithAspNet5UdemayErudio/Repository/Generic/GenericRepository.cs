@@ -1,46 +1,48 @@
-﻿using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+﻿using Microsoft.EntityFrameworkCore;
 using RestWithAspNet5UdemayErudio.Models;
+using RestWithAspNet5UdemayErudio.Models.Base;
 using RestWithAspNet5UdemayErudio.Models.Context;
-using System;
 
-namespace RestWithAspNet5UdemayErudio.Repository.Implementation
+namespace RestWithAspNet5UdemayErudio.Repository.Generic
 {
-    public class BookRepositoryImplementation : IBookRepository
+    public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     {
-
         private MySqlContext _mySqlContext;
-
-        public BookRepositoryImplementation(MySqlContext mySqlContext)
+        private DbSet<T> dataset;
+        public GenericRepository(MySqlContext mySqlContext)
         {
             _mySqlContext = mySqlContext;
+            dataset = _mySqlContext.Set<T>();
+
         }
 
-        public Book Create(Book book)
+        public T Create(T item)
         {
-
             try
             {
-                _mySqlContext.books.Add(book);
+                dataset.Add(item);
                 _mySqlContext.SaveChanges();
+                return item;
             }
             catch (Exception ex)
             {
 
                 throw ex;
             }
-            return book;
+
+
         }
 
         public void Delete(long id)
         {
-            var result = _mySqlContext.books.FirstOrDefault(e => e.Id.Equals(id));
+            var result = dataset.FirstOrDefault(e => e.Id.Equals(id));
 
             if (result != null)
             {
 
                 try
                 {
-                    _mySqlContext.books.Remove(result);
+                    dataset.Remove(result);
                     _mySqlContext.SaveChanges();
                 }
                 catch (Exception ex)
@@ -49,37 +51,33 @@ namespace RestWithAspNet5UdemayErudio.Repository.Implementation
                     throw ex;
                 }
             }
-
-
-
-
         }
 
-        public List<Book> FindAll()
+
+
+        public List<T> FindAll()
         {
-            return _mySqlContext.books.ToList();
+            return dataset.ToList();
         }
 
-        public Book FindByID(long id)
+        public T FindByID(long id)
         {
-
-            return _mySqlContext.books.SingleOrDefault(e => e.Id.Equals(id));
-
+            return dataset.SingleOrDefault(e => e.Id.Equals(id));
         }
 
-        public Book Update(Book book)
+        public T Update(T item)
         {
-            if (!Exists(book.Id))
+            if (!Exists(item.Id))
                 return null;
 
-            var result = _mySqlContext.books.FirstOrDefault(e => e.Id.Equals(book.Id));
+            var result = dataset.FirstOrDefault(e => e.Id.Equals(item.Id));
 
             if (result != null)
             {
 
                 try
                 {
-                    _mySqlContext.books.Entry(result).CurrentValues.SetValues(book);
+                    dataset.Entry(result).CurrentValues.SetValues(item);
                     _mySqlContext.SaveChanges();
                 }
                 catch (Exception ex)
@@ -88,12 +86,17 @@ namespace RestWithAspNet5UdemayErudio.Repository.Implementation
                     throw ex;
                 }
             }
-            return book;
+            else
+            {
+                return null;
+            }
+
+            return item;
         }
 
         public bool Exists(long id)
         {
-            return _mySqlContext.books.Any(e => e.Id.Equals(id));
+            return dataset.Any(e => e.Id.Equals(id));
         }
     }
 }

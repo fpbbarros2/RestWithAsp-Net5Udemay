@@ -1,14 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using RestWithAspNet5UdemayErudio.Models.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection.Metadata.Ecma335;
 
 namespace RestWithAspNet5UdemayErudio.Models
 {
 
     [Table("books")]
-    public class Book
+    public class Book : BaseEntity
     {
-        [Column("id")]
-        public long Id { get; set; }
+
 
         [Column("title")]
         public string Title { get; set; }

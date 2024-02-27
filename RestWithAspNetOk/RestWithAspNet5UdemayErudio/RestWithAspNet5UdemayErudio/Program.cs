@@ -6,7 +6,8 @@ using RestWithAspNet5UdemayErudio.Bussines;
 using RestWithAspNet5UdemayErudio.Bussines.Implementation;
 using RestWithAspNet5UdemayErudio.Models.Context;
 using RestWithAspNet5UdemayErudio.Repository;
-using RestWithAspNet5UdemayErudio.Repository.Implementation;
+using RestWithAspNet5UdemayErudio.Repository.Generic;
+
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,10 +35,12 @@ builder.Services.AddApiVersioning();
 
 
 builder.Services.AddScoped<IPersonBussines, PersonBussinesImplementation>();
-builder.Services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
-
 builder.Services.AddScoped<IBookBussines, BookBussinesImplementation>();
-builder.Services.AddScoped<IBookRepository, BookRepositoryImplementation>();
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
+
+
 
 
 

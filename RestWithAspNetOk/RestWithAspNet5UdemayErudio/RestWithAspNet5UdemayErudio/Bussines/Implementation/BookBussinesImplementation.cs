@@ -1,13 +1,13 @@
 ﻿using RestWithAspNet5UdemayErudio.Models;
-using RestWithAspNet5UdemayErudio.Repository;
+using RestWithAspNet5UdemayErudio.Repository.Generic;
 
 namespace RestWithAspNet5UdemayErudio.Bussines.Implementation
 {
     public class BookBussinesImplementation : IBookBussines
     {
-        private readonly IBookRepository _repository;
+        private readonly IRepository<Book> _repository;
 
-        public BookBussinesImplementation(IBookRepository repository)
+        public BookBussinesImplementation(IRepository<Book> repository)
         {
             _repository = repository;
         }

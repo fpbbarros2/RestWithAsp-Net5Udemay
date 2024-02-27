@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using RestWithAspNet5UdemayErudio.Models.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestWithAspNet5UdemayErudio.Models
 {
     [Table("person")]
-    public class Person
+    public class Person : BaseEntity
     {
-        [Column("id")]
-        public long Id { get; set; }
+        
 
         [Column("first_name")]
         public string FirstName { get; set; }

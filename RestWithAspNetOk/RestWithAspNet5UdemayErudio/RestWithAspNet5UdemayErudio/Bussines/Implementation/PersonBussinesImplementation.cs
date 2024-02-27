@@ -1,14 +1,13 @@
 ﻿using RestWithAspNet5UdemayErudio.Models;
-using RestWithAspNet5UdemayErudio.Models.Context;
-using RestWithAspNet5UdemayErudio.Repository;
+using RestWithAspNet5UdemayErudio.Repository.Generic;
 
 namespace RestWithAspNet5UdemayErudio.Bussines.Implementation
 {
     public class PersonBussinesImplementation : IPersonBussines
     {
-        private readonly IPersonRepository _repository;
+        private readonly IRepository<Person> _repository;
 
-        public PersonBussinesImplementation(IPersonRepository repository)
+        public PersonBussinesImplementation(IRepository<Person> repository)
         {
             _repository = repository;
         }
