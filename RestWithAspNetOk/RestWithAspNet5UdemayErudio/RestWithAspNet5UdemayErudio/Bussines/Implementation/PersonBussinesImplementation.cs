@@ -1,4 +1,6 @@
-﻿using RestWithAspNet5UdemayErudio.Models;
+﻿using RestWithAspNet5UdemayErudio.Data.Converter.Implemetations;
+using RestWithAspNet5UdemayErudio.Data.Vo;
+using RestWithAspNet5UdemayErudio.Models;
 using RestWithAspNet5UdemayErudio.Repository.Generic;
 
 namespace RestWithAspNet5UdemayErudio.Bussines.Implementation
@@ -6,30 +8,32 @@ namespace RestWithAspNet5UdemayErudio.Bussines.Implementation
     public class PersonBussinesImplementation : IPersonBussines
     {
         private readonly IRepository<Person> _repository;
+        private readonly PersonConverter _converter;
 
         public PersonBussinesImplementation(IRepository<Person> repository)
         {
             _repository = repository;
+            _converter = new PersonConverter();
         }
 
-        public List<Person> FindAll()
+        public List<PersonVo> FindAll()
         {
-            return _repository.FindAll();
+            return _converter.Parse(_repository.FindAll());
         }
 
-        public Person FindByID(long id)
+        public PersonVo FindByID(long id)
         {
-            return _repository.FindByID(id);
+            return _converter.Parse(_repository.FindByID(id));
         }
 
-        public Person Create(Person person)
+        public PersonVo Create(PersonVo person)
         {
-            return _repository.Create(person);
+            return _converter.Parse(_repository.Create(_converter.Parse(person)));
         }
 
-        public Person Update(Person person)
+        public PersonVo Update(PersonVo person)
         {
-            return _repository.Update(person);
+            return _converter.Parse(_repository.Update(_converter.Parse(person)));
         }
 
         public void Delete(long id)

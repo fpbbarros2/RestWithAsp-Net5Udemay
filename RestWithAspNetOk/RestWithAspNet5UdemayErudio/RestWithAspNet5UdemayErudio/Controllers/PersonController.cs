@@ -1,7 +1,8 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using RestWithAspNet5UdemayErudio.Models;
 using RestWithAspNet5UdemayErudio.Bussines;
+using RestWithAspNet5UdemayErudio.Data.Vo;
+using RestWithAspNet5UdemayErudio.Models;
 
 namespace RestWithAspNet5UdemayErudio.Controllers
 {
@@ -41,7 +42,7 @@ namespace RestWithAspNet5UdemayErudio.Controllers
 
 
         [HttpPost]
-        public IActionResult Post([FromBody] Person person)
+        public IActionResult Post([FromBody] PersonVo person)
         {
 
             if (person == null)
@@ -52,7 +53,7 @@ namespace RestWithAspNet5UdemayErudio.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] Person person)
+        public IActionResult Put([FromBody] PersonVo person)
         {
 
             if (person == null)
