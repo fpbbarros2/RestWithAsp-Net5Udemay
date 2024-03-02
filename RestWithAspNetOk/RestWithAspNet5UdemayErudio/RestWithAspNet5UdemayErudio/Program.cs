@@ -1,5 +1,6 @@
 using EvolveDb;
 using EvolveDb.Migration;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using RestWithAspNet5UdemayErudio.Bussines;
@@ -9,6 +10,7 @@ using RestWithAspNet5UdemayErudio.Repository;
 using RestWithAspNet5UdemayErudio.Repository.Generic;
 
 using Serilog;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,12 @@ if (builder.Environment.IsDevelopment())
 }
 
 
+// Para aceitar a aplicação usar xml e json
+//builder.Services.AddMvc(option => {
+//    option.RespectBrowserAcceptHeader = true;
+//    option.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json").ToString());
+//    option.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml").ToString());
+//}).AddXmlSerializerFormatters();
 
 builder.Services.AddApiVersioning();
 
