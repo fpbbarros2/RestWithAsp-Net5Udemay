@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using RestWithAspNet5UdemayErudio.Bussines;
 using RestWithAspNet5UdemayErudio.Data.Vo;
+using RestWithAspNet5UdemayErudio.Hypermedia.Filters;
 using RestWithAspNet5UdemayErudio.Models;
 
 namespace RestWithAspNet5UdemayErudio.Controllers
@@ -23,6 +24,7 @@ namespace RestWithAspNet5UdemayErudio.Controllers
         }
 
         [HttpGet]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get()
         {
 
@@ -30,6 +32,7 @@ namespace RestWithAspNet5UdemayErudio.Controllers
         }
 
         [HttpGet("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get(long id)
         {
             var person = _personBussines.FindByID(id);
@@ -42,6 +45,7 @@ namespace RestWithAspNet5UdemayErudio.Controllers
 
 
         [HttpPost]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Post([FromBody] PersonVo person)
         {
 
@@ -53,6 +57,7 @@ namespace RestWithAspNet5UdemayErudio.Controllers
         }
 
         [HttpPut]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Put([FromBody] PersonVo person)
         {
 
@@ -63,7 +68,7 @@ namespace RestWithAspNet5UdemayErudio.Controllers
             return Ok(_personBussines.Update(person));
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")]        
         public IActionResult Delete(long id)
         {
             var person = _personBussines.FindByID(id);

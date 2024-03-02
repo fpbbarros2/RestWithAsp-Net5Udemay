@@ -1,18 +1,20 @@
 using EvolveDb;
-using EvolveDb.Migration;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using RestWithAspNet5UdemayErudio.Bussines;
 using RestWithAspNet5UdemayErudio.Bussines.Implementation;
+using RestWithAspNet5UdemayErudio.Hypermedia.Enricher;
+using RestWithAspNet5UdemayErudio.Hypermedia.Filters;
 using RestWithAspNet5UdemayErudio.Models.Context;
-using RestWithAspNet5UdemayErudio.Repository;
 using RestWithAspNet5UdemayErudio.Repository.Generic;
 
 using Serilog;
-using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var filterOptions = new HyperMediaFilterOptions();
+filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
 
 // Add services to the container.
 
@@ -40,17 +42,12 @@ if (builder.Environment.IsDevelopment())
 
 builder.Services.AddApiVersioning();
 
-
+builder.Services.AddSingleton(filterOptions);
 
 builder.Services.AddScoped<IPersonBussines, PersonBussinesImplementation>();
 builder.Services.AddScoped<IBookBussines, BookBussinesImplementation>();
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
-
-
-
-
-
 
 
 var app = builder.Build();
@@ -62,6 +59,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapControllerRoute("DefaultApi", "{controller=values}/v{version=apiVersion}/{id?}");
 
 app.Run();
 

@@ -1,8 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using RestWithAspNet5UdemayErudio.Hypermedia;
+using RestWithAspNet5UdemayErudio.Hypermedia.Abstract;
+using System.Text.Json.Serialization;
 
 namespace RestWithAspNet5UdemayErudio.Data.Vo
 {
-    public class PersonVo
+    public class PersonVo : ISupportsHyperMedia
     {
         
         public long Id { get; set; }        
@@ -10,5 +12,6 @@ namespace RestWithAspNet5UdemayErudio.Data.Vo
         public string LastName { get; set; }       
         public string Address { get; set; }
         public string Gender { get; set; }
+        public List<HyperMediaLink> Links { get; set; } = new List<HyperMediaLink>();
     }
 }
