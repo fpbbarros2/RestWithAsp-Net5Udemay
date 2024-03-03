@@ -22,6 +22,15 @@ filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
 
 builder.Services.AddRouting(op => op.LowercaseUrls = true);
 
+
+builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
+{
+    builder.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+}));
+
+
 builder.Services.AddControllers();
 
 var connection = builder.Configuration["ConnectionStrings:MySqlConnectionString"];
@@ -56,7 +65,8 @@ builder.Services.AddSwaggerGen(c =>
         Title = "Rest Api's from 0 to azure",
         Version = "v1",
         Description = "Api restfull developed",
-        Contact = new OpenApiContact { 
+        Contact = new OpenApiContact
+        {
             Name = "Fábio Barros",
             Url = new Uri("https://www.google.com.br")
         }
@@ -76,26 +86,19 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.MapControllerRoute("DefaultApi", "{controller=values}/v{version=apiVersion}/{id?}");
-
+app.UseCors();
 app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Rest API - v1");
-});
+app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Rest API - v1"); });
+
 
 var options = new RewriteOptions();
 options.AddRedirect("^$", "swagger");
 app.UseRewriter(options);
 
+app.UseAuthorization();
+app.MapControllers();
+app.MapControllerRoute("DefaultApi", "{controller=values}/v{version=apiVersion}/{id?}");
 
 app.Run();
 
