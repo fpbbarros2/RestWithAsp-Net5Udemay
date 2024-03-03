@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using RestWithAspNet5UdemayErudio.Bussines;
 using RestWithAspNet5UdemayErudio.Data.Vo;
 using RestWithAspNet5UdemayErudio.Hypermedia.Filters;
-using RestWithAspNet5UdemayErudio.Models;
 
 namespace RestWithAspNet5UdemayErudio.Controllers
 {
@@ -24,6 +23,10 @@ namespace RestWithAspNet5UdemayErudio.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType((200), Type = typeof(List<PersonVo>))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]        
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get()
         {
@@ -32,6 +35,10 @@ namespace RestWithAspNet5UdemayErudio.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType((200), Type = typeof(PersonVo))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get(long id)
         {
@@ -45,6 +52,9 @@ namespace RestWithAspNet5UdemayErudio.Controllers
 
 
         [HttpPost]
+        [ProducesResponseType((200), Type = typeof(PersonVo))]       
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Post([FromBody] PersonVo person)
         {
@@ -57,7 +67,10 @@ namespace RestWithAspNet5UdemayErudio.Controllers
         }
 
         [HttpPut]
-        [TypeFilter(typeof(HyperMediaFilter))]
+        [ProducesResponseType((200), Type = typeof(PersonVo))]       
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
+        [TypeFilter(typeof(HyperMediaFilter))]        
         public IActionResult Put([FromBody] PersonVo person)
         {
 
@@ -69,6 +82,9 @@ namespace RestWithAspNet5UdemayErudio.Controllers
         }
 
         [HttpDelete("{id}")]        
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]        
         public IActionResult Delete(long id)
         {
             var person = _personBussines.FindByID(id);

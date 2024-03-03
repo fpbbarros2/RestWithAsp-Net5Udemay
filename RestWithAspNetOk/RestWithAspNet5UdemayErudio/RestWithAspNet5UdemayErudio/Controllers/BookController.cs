@@ -23,6 +23,10 @@ namespace RestWithAspNet5UdemayErudio.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType((200), Type = typeof(List<BookVo>))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get()
         {
@@ -31,6 +35,10 @@ namespace RestWithAspNet5UdemayErudio.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType((200), Type = typeof(BookVo))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get(long id)
         {
@@ -44,6 +52,9 @@ namespace RestWithAspNet5UdemayErudio.Controllers
 
 
         [HttpPost]
+        [ProducesResponseType((200), Type = typeof(BookVo))]       
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Post([FromBody] BookVo book)
         {
@@ -56,6 +67,9 @@ namespace RestWithAspNet5UdemayErudio.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType((200), Type = typeof(BookVo))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Put([FromBody] BookVo book)
         {
@@ -67,6 +81,9 @@ namespace RestWithAspNet5UdemayErudio.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         public IActionResult Delete(long id)
         {
             var book = _bookBussines.FindByID(id);
